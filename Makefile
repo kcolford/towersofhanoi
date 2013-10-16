@@ -11,7 +11,11 @@ proof.dvi: proof.tex test.tex
 
 %.ps: %.dvi; dvips $<
 
-print: proof.ps; lp $<
+%.pdf: %.dvi; dvipdf $<
+
+pdf: proof.pdf
+
+print: proof.ps; lp $^
 
 clean: ; $(RM) test.tex proof.dvi proof.log proof.ps
 
@@ -19,4 +23,4 @@ dist:
 	$(RM) discovery.tar.gz
 	tar zcf discovery.tar.gz Makefile proof.tex test.py
 
-.PHONY: clean print dist
+.PHONY: pdf print clean dist
