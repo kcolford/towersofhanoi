@@ -1,0 +1,127 @@
+\def\func{M_{k-1}(i) + 2M_k(n - i); i\in \left[1,n\right)}
+\def\oth{{\rm otherwise}}
+
+\footline{\tenrm Copyright \copyright\ 2013 Kieran Colford\hfill\folio}
+
+\centerline{\bf The Running Time of Solving the Towers of Hanoi Puzzle}
+\centerline{By: Kieran Colford}
+\centerline{Date: Tuesday, October $15^{th}$, 2013}
+
+\beginsection Given
+
+$$M_k(n)=\left\{\matrix{1 & n = 1\cr
+                        2^n - 1 & k = 1\cr
+                        Min\{\func\}&\oth\cr}\right.$$
+
+Then, by expanding the $M_k(n - i)$ term, we find
+$$M_k(n)=\left\{\matrix{1&n=1\cr
+                        2^n-1&k=1\cr
+                        \sum^{G-1}_{b=0}2^bM_{k-1}(g_b)&\oth\cr}\right.\eqno{(1)}$$
+
+where $G$ is the size of some $g$ which minimizes $M_k(n)$ and satisfies
+$$n=\sum^{G-1}_{b=0} g_b$$
+
+\beginsection Proof for k equals 2
+
+Then, for the case when $k = 2$ we have
+$$\eqalign{M_2(n)&=\sum^{G-1}_{b=0} 2^b(2^{g_b}-1)\cr
+                 &=\sum^{G-1}_{b=0} 2^{b+g_b} - \sum^{G-1}_{b=0} 2^b\cr
+                 &=\sum^{G-1}_{b=0} 2^{b+g_b} - 2^G + 1\cr}$$
+
+Let $a$ be the largest integer such that $T_a \le n$, where $T_n$ is
+the $n^{th}$ triangular number (or $T_n={1\over 2}n(n+1)$).  We can
+then construct $g$ such that $g=\{a,\dots,c,c,\dots,1\}$, where
+$c=n-T_a$ and $G=a+1$.  Thus we have
+$$\eqalign{M_2(n)&=\sum^{a-c}_{b=0}2^a+\left(\sum^{a}_{b=a-c+1}2^{a+1}\right)-2^{a+1}+1\cr
+                 &=(a-c+1)2^a+c2^{a+1}-2^{a+1}+1\cr
+                 &=(a + c - 1)2^a + 1\cr}$$
+
+We know that this is the smallest configuration for $g$ because
+$M_2(n)$ has a big-O notation of $O(\sqrt{n}2^{\sqrt{n}})$ and any
+other configuration of $g$ would lead to an exponent greater than
+$\sqrt{n}$.  A more thorough proof of this can be constructed with
+calculus, but this is sufficient for now.
+
+\beginsection General Proof
+
+Now to move on the general case of $M_k(n)$ for all $k$.  In order to
+guarantee that the solution to $M_k(n)$ yields the minimum possible
+value, we can represent $n$ as a sum of perfect inputs to $M_k$.
+Conviently, (1) gives us a way of computing such a thing.  As seen in
+the previous proof for the case when $k=2$, the ideal input for $M_2$
+is some triangular number $T_a$ which gives us $M_2(T_a)=(a-1)2^a+1$.
+We then get the ideal input for $M_3$ like this,
+$$\sum^a_{b=0}2^bM_2(T_{a-b})=M_3(\sum^a_{b=0}T_b)\eqno{(2)}$$
+
+% function f
+Thus, the ideal input for $M_3$ is some sum of consecutive triangular
+numbers.  In order to generalize this further, let us create a
+function $f_k(a)$ which will produce the ideal input to a given $M_k$
+so that $M_k(f_k(a))$ is as small as possible.  The solution to $f_k$ is,
+$$f_k(a)=\sum^a_{b=0}f_{k-1}(b)$$
+If the reader notices the relationship between this and pascal's
+triangle, they will see that consequently we have the following three
+identities,
+$$f_0(a)=1$$
+$$f_k(a)=\left({a+k-1\atop k}\right)$$
+$$f_{k+1}(a)+f_k(a+1)=f_{k+1}(a+1)$$
+
+\proclaim Side Note.  The second identity is useful because it allows
+us to compute $f_k(a)$ without having to compute it's neighbours.
+This ``Random Access'' allows a programmer to solve the largest
+integer a satisfying $f_k(a)\le n$ by binary search rather than by the
+much slower linear search.
+
+% general
+We can then simplify equasion (2) further, like this,
+$$M_3(f_3(a))=\sum^a_{b=0}2^bM_2(f_2(b))=h_3(a)2^a-1$$
+for some $h_3(a)$.  We then see that the general form of the perfect
+solution to $M_k$ is,
+$$M_k(f_k(a))=h_k(a)2^a+(-1)^k\eqno{(3)}$$
+for some $h_k(a)$.  So in the process of finding the above solution,
+one naturally runs into the following solution for $h_k(a)$,
+$$h_k(a)=\left\{\matrix{1&k=1\cr\left(\sum^a_{b=0}h_{k-1}(b)\right)-2(-1)^k&\oth\cr}\right.$$
+If one observes the fact that $h_k(a)$ is similar in construction to
+$f_k(a)$, $h_k(a)$ can be further simplified into an alternating
+series dependant on $f_k(a)$,
+$$h_k(a)=\sum^{k-1}_{b=0}(-1)^{k+1-b}f_b(a)$$
+
+% composition
+And to solve $M_k(n)$ for any $n$, let $a$ be the largest integer
+which satisfies $f_k(a)\le n$ and $w=n-f_k(a)$.  This gives
+$M_k(n)=M_k(f_k(a)+w)$, and if we repeat the above process so that we
+get $u$, the largest integer such that $f_{k-1}(u)\le w$ (note the
+$k-1$), and $v=w-f_{k-1}(u)$.  Thus
+$M_k(n)=M_k(f_k(a)+f_{k-1}(u)+v)$.  This can be further simplified to
+$$M_k(f_k(a)+f_{k-1}(u)+v)=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)+v))\eqno{(4)}$$
+
+% solution
+In order to compute $M_k$ for any input, we can iterate (4) to get a
+simple summation, and substitute in (3) to get closed form solution to
+$M_k(n)$ (provided the decomposition if $n$ into
+$\sum^k_{b=1}f_b(a_b)$ is already known).  Thus, 
+$$\eqalign{M_k(f_k(a)+w)&=M_k(f_k(a)+f_{k-1}(u)+v)\cr
+                        &=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)+v))\cr
+                        &=(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k)\cr}$$
+
+Thus, it is trivial to compute $M_k(n)$ for all $n$ and all $k$ using
+the simple method of using the tail-recursive,
+$$M_k(f_k(a)+w)=\left\{\matrix{h_k(a)2^a+(-1)^k&w=0\cr(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(f_{k-1}(u))+(-1)^k)&\oth\cr
+u=Max\{i;i\in {\cal Z}, f_{k-1}(i)\le w\}\cr}\right.$$
+
+\noindent{\bf Q.E.D.}
+
+\vfill
+
+The following is a program written in python v3.3.2 that implements
+the above method.  For details, read the enclosed docstrings and
+comments.  Specifically, see the docstring for method m for an idea of
+how powerful the algorithm is.  The module passes all test cases that
+can be performed in a reasonable time.  The Tester class can be edited
+to perform additional tests if one wishes.
+
+\eject
+
+\input test
+
+\bye
