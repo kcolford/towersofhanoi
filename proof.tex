@@ -39,7 +39,7 @@ $$\eqalign{M_2(n)&=\sum^{a-c}_{b=0}2^a+\left(\sum^{a}_{b=a-c+1}2^{a+1}\right)-2^
 We know that this is the smallest configuration for $g$ because
 $M_2(n)$ has a big-O notation of $O(\sqrt{n}2^{\sqrt{n}})$ and any
 other configuration of $g$ would lead to an exponent greater than
-$\sqrt{n}$.  A more thorough proof of this can be constructed with
+$\sqrt{n}$.  A more rigorous proof of this can be constructed with
 calculus, but this is sufficient for now.
 
 \beginsection General Proof
@@ -73,7 +73,7 @@ integer a satisfying $f_k(a)\le n$ by binary search rather than by the
 much slower linear search.
 
 % general
-We can then simplify equasion (2) further, like this,
+We can then simplify equation (2) further, like this,
 $$M_3(f_3(a))=\sum^a_{b=0}2^bM_2(f_2(b))=h_3(a)2^a-1$$
 for some $h_3(a)$.  We then see that the general form of the perfect
 solution to $M_k$ is,
@@ -113,8 +113,7 @@ $$\eqalign{M_k(f_k(a)+w)&=M_k(f_k(a)+f_{k-1}(u)+v)\cr
 
 Thus, it is trivial to compute $M_k(n)$ for all $n$ and all $k$ using
 the simple method of using the tail-recursive,
-$$M_k(f_k(a)+w)=\left\{\matrix{h_k(a)2^a+(-1)^k&w=0\cr(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(f_{k-1}(u))+(-1)^k)&\oth\cr
-u=Max\{i;i\in {\cal Z}, f_{k-1}(i)\le w\}\cr}\right.$$
+$$\eqalign{M_k(f_k(a)+w)&=\left\{\matrix{h_k(a)2^a+(-1)^k&w=0\cr(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(f_{k-1}(u))+(-1)^k)&\oth\cr}\right.\cr&{\rm where\;}u=Max\{i;i\in {\cal Z}, f_{k-1}(i)\le w\}\cr}$$
 
 \noindent{\bf Q.E.D.}
 
