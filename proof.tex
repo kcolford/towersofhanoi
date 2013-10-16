@@ -113,7 +113,7 @@ $$\eqalign{M_k(f_k(a)+w)&=M_k(f_k(a)+f_{k-1}(u)+v)\cr
 
 Thus, it is trivial to compute $M_k(n)$ for all $n$ and all $k$ using
 the simple method of using the tail-recursive,
-$$\eqalign{M_k(f_k(a)+w)&=\left\{\matrix{h_k(a)2^a+(-1)^k&w=0\cr(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(f_{k-1}(u))+(-1)^k)&\oth\cr}\right.\cr&{\rm where\;}u=Max\{i;i\in {\cal Z}, f_{k-1}(i)\le w\}\cr}$$
+$$\eqalign{M_k(f_k(a)+w)&=\left\{\matrix{h_k(a)2^a+(-1)^k&w=0\cr(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k)&\oth\cr}\right.\cr&{\rm where\;}u=Max\{i;i\in {\cal Z}, f_{k-1}(i)\le w\}\cr}$$
 
 \noindent{\bf Q.E.D.}
 
