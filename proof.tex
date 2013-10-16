@@ -95,6 +95,13 @@ $k-1$), and $v=w-f_{k-1}(u)$.  Thus
 $M_k(n)=M_k(f_k(a)+f_{k-1}(u)+v)$.  This can be further simplified to
 $$M_k(f_k(a)+f_{k-1}(u)+v)=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)+v))\eqno{(4)}$$
 
+This occurs because as was seen in the proof for $k=2$,
+$$\eqalignno{M_k(f_k(a))&=\sum^{a-1}_{b=0}2^bM_{k-1}(f_{k-1}(b))\cr
+                        &=\sum^{a-1-u}_{b=0}2^b_{k-1}(f_{k-1}(b))+\sum^{a-1}_{b=a-u}2^bM_{k1}(f_{k-1}(b))\cr
+  M_k(f_k(a)+f_{k-1}(u))&=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(b))+2^{a-u}M_{k-1}(f_{k-1}(u))+\sum^{a-1}_{b=a-u}2^{b+1}M_{k-1}(f_{k-1}(b))&(*)\cr
+                      &=M_k(f_k(a))+2^{a-u}M_{k-1}(f_{k-1}(u))\cr}$$
+Then, (*) can simply be translated into (4).
+
 % solution
 In order to compute $M_k$ for any input, we can iterate (4) to get a
 simple summation, and substitute in (3) to get closed form solution to
