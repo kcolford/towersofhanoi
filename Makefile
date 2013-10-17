@@ -1,3 +1,5 @@
+all: proof.dvi proof.pdf
+
 proof.dvi: proof.tex test.tex
 
 %.dvi: %.tex; tex $<
@@ -17,7 +19,7 @@ pdf: proof.pdf
 
 print: proof.ps; lp $^
 
-clean: ; $(RM) test.tex proof.dvi proof.log proof.ps
+clean: ; $(RM) test.tex proof.dvi proof.log proof.ps proof.pdf
 
 dist:
 	$(RM) discovery.tar.gz
