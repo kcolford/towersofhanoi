@@ -1,15 +1,15 @@
-all: proof.dvi proof.pdf
+all: proof.dvi
 
-proof.dvi: proof.tex test.tex
+proof.dvi: proof.tex test.py.tex
 
 %.dvi: %.tex; tex $<
 
-%.tex: %.py
-	$tmpfile=`mktemp`
-	cat $< > $tmpfile
-	src2tex $tmpfile
-	perl -pe 's/\\footline={.*?}//eg;' < $tmpfile.tex > $@
-	$(RM) $tmpfile $tmpfile.tex
+%.py.tex: %.py
+	link $< temp
+	src2tex temp
+	perl -pe 's/\\footline={.*?}//eg;' < temp.tex >$@
+	unlink temp
+	$(RM) temp.tex
 
 %.ps: %.dvi; dvips $<
 
@@ -19,7 +19,7 @@ pdf: proof.pdf
 
 print: proof.ps; lp $^
 
-clean: ; $(RM) test.tex proof.dvi proof.log proof.ps proof.pdf
+clean: ; $(RM) test.py.tex proof.dvi proof.log proof.ps proof.pdf
 
 dist:
 	$(RM) discovery.tar.gz
