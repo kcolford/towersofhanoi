@@ -7,13 +7,35 @@
 
 \centerline{\bf The Running Time of Solving the Towers of Hanoi Puzzle}
 \centerline{By: Kieran Colford}
-\centerline{Date: Wednesday, October $16^{th}$, 2013}
+\centerline{Date: Thursday, October $24^{th}$, 2013}
+
+\beginsection Introduction
+
+The Towers of Hanoi is a well known puzzle game in which there are
+three rods (or towers), on the first rod there are a number of disks
+of varying size and the goal of the game is to move each disk onto the
+last rod.  Except there is a catch, you can only move one disk at a
+time and you can only a disk on to an empty rod or on top of another
+disk that is larger than it.
+
+There is a well known recursive solution to this puzzle which is where
+you move all but the largest disk (which is also the one placed at the
+bottom) to an intermediate tower, then move the largest disk to the
+destination, and then move the remaining disks on to the destination.
+This algorithm has a running time of $M_1(n)=2^{n}-1$ where $n$ is the
+number of disks.
+
+It is interesting to study the question of how much faster is it to
+solve this puzzle when the number of towers increases to more than
+three.
 
 \beginsection Given
 
-$$M_k(n)=\left\{\matrix{1 & n = 1\cr
-                        2^n - 1 & k = 1\cr
-                        Min\{\func\}&\oth\cr}\right.$$
+$$M_k(n)=\left\{\matrix{1 & n = 1\cr 2^n - 1 & k = 1\cr
+                       Min\{\func\}&\oth\cr}\right.$$
+
+Where $k$ is the number of towers excluding the first and last (so
+it's the number of empty towers) and $n$ is the number of disks.
 
 Then, by expanding the $M_k(n - i)$ term, we find
 $$M_k(n)=\left\{\matrix{1&n=1\cr
