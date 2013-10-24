@@ -1,6 +1,6 @@
 all: proof.dvi
 
-proof.dvi: proof.tex test.py.tex
+proof.tex: test.py.tex
 
 %.dvi: %.tex; tex $<
 
@@ -15,7 +15,7 @@ proof.dvi: proof.tex test.py.tex
 
 %.pdf: %.dvi; dvipdf $<
 
-pdf: proof.pdf
+%.html: %.tex; tth < $< > $@
 
 print: proof.ps; lp $^
 
@@ -25,4 +25,4 @@ dist:
 	$(RM) discovery.tar.gz
 	tar zcf discovery.tar.gz Makefile proof.tex test.py
 
-.PHONY: pdf print clean dist
+.PHONY: print clean dist
