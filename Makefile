@@ -2,20 +2,15 @@ all: proof.dvi
 
 proof.tex: test.py.tex
 
-%.dvi: %.tex; tex $<
-
 %.py.tex: %.py
-	link $< temp
-	src2tex temp
-	perl -pe 's/\\footline={.*?}//eg;' < temp.tex >$@
-	unlink temp
-	$(RM) temp.tex
+	cat -n $< > $<.txt
+	src2tex $<.txt
+	perl -pe 's/\\footline={.*?}//eg;' < $<.txt.tex > $@
+	$(RM) $<.txt $<.txt.tex
 
-%.ps: %.dvi; dvips $<
+.dvi.ps: ; dvips $<
 
-%.pdf: %.dvi; dvipdf $<
-
-%.html: %.tex; tth < $< > $@
+.dvi.pdf: ; dvipdf $<
 
 print: proof.ps; lp $^
 

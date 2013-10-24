@@ -36,7 +36,7 @@ class Tester(unittest.TestCase):
    This is the test case for checking the accuracy of the module's
    time solving methods.
    """
-   def test_main(self):
+   def test_main(self: 'Tester') -> None:
       """
       Run a test to make sure that method m behaves the same as
       get_time.  Since we cannot test all possible inputs, we only
@@ -47,11 +47,11 @@ class Tester(unittest.TestCase):
             self.assertEqual(m(k, n), get_time(n, k))
 
 
-def get_time(n, m):
+def get_time(n: int, m: int) -> int:
    pass
 
 @lru_cache(None)
-def get_i(n, m):
+def get_i(n: int, m: int) -> int:
    """
    Return the ideal factor by which to split a stack of n disks with m
    extra towers.
@@ -70,7 +70,7 @@ def get_i(n, m):
    return 1 if m == 1 or n == 1 else min(range(1, n), key=func)
 
 @lru_cache(None)
-def get_time(n, m):
+def get_time(n: int, m: int) -> int:
    """
    Compute the minimum time needed to solve the Towers of Hanoi
    problem consisting of n disks and m towers (not including the
@@ -87,7 +87,7 @@ def get_time(n, m):
    i = get_i(n, m)
    return 2 * get_time(n - i, m) + get_time(i, m - 1)
 
-def towers(n, m):
+def towers(n: int, m: int) -> list:
    """
    Generate a nested list of ints to represent the Towers of Hanoi,
    using the ints as the size of the "disk".
@@ -96,7 +96,7 @@ def towers(n, m):
    assert n > -1
    return [list(range(n, -1, -1))] + [[n] for i in range(m + 1)]
 
-def move(t, frm, to, n):
+def move(t: list, frm: int, to: int, n: int) -> None:
    """
    Move n disks from the tower t[frm] to the tower t[to] and print out
    each intermediate step.
@@ -118,7 +118,7 @@ def move(t, frm, to, n):
       move(t, frm, to, i)
       move(t, tmp, to, n - i)
 
-def solve(n, m):
+def solve(n: int, m: int) -> None:
    """
    High level function to set up m + 2 towers with n disks on the
    first one, and solve it while printing out each step.
@@ -128,7 +128,7 @@ def solve(n, m):
    move(a, 0, m + 1, n)
 
 @lru_cache(None)
-def factorial(n):
+def factorial(n: int) -> int:
    """
    Compute the factorial of (the product of all positive integers upto
    and including) n.
@@ -144,7 +144,7 @@ def factorial(n):
    
    return 1 if n <= 1 else n * factorial(n - 1)
 
-def f(k, a):
+def f(k: int, a: int) -> int:
    """
    Compute the binomial coefficient of a + k - 1 choose k.
 
@@ -159,9 +159,10 @@ def f(k, a):
    """
    return factorial(a + k - 1) // factorial(k) // factorial(a - 1)
 
-def h(k, a):
+def h(k: int, a: int) -> int:
    """
-   This is a helper function for method m.
+   This is a helper function for method m.  See the proof for more
+   information.
 
    >>> h(1, 3)
    1
@@ -176,10 +177,13 @@ def h(k, a):
    m = sum(f(b, a) for b in range(k - 2, -1, -2))
    return p - m
 
-def break_input(k, n):
+def break_input(k: int, n: int) -> int:
    """
    This is helper function for method m, it computes the largest
    integer a that satisfies f(k, a) <= n
+
+   This method is implemented using a naive linear search but can be
+   optimized into using binary search very easily.
 
    >>> break_input(1, 15)
    15
@@ -193,7 +197,7 @@ def break_input(k, n):
       a += 1
    return a
 
-def m(k, n):
+def m(k: int, n: int) -> int:
    """
    This function computes the time it takes to solve the Towers of
    Hanoi problem with k extra towers and n disks.
@@ -224,17 +228,18 @@ def m(k, n):
    >>> m(15, 100)
    367
    """
-   if n == 0: return 0
-   if k == 1: return 2**n - 1
+   if n == 0:
+      return 0
    a = break_input(k, n)
    w = n - f(k, a)
-   u = break_input(k - 1, w)
-   ret = (h(k, a) + h(k, u)) * 2**a + (-1)**k
-   if w:
-      ret += 2**(a - u) * (m(k - 1, w) + (-1)**k)
-   return ret
+   if w == 0:
+      return h(k, a) * 2**a + (-1)**k
+   else:
+      u = break_input(k - 1, w)
+      return ((h(k, a) + h(k, u)) * 2**a + (-1)**k + 
+              2**(a-u) * (m(k - 1, w) + (-1)**k))
 
-def main():
+def main() -> None:
    """
    Run the profiler and test cases for this module.  You can choose
    what to run by (un)commenting the options you want.
@@ -243,7 +248,7 @@ def main():
    doctest.testmod()
    # profiling
    #profile.run('[m(i, 100) for i in range(2, 20)]')
-   # full test, toggle 
+   # full test suit
    #unittest.main()
 
 if __name__ == '__main__':

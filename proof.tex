@@ -1,3 +1,5 @@
+%&plain
+
 \def\func{M_{k-1}(i) + 2M_k(n - i); i\in \left[1,n\right)}
 \def\oth{{\rm otherwise}}
 
@@ -104,10 +106,9 @@ $$\eqalignno{M_k(f_k(a))&=\sum^{a-1}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))\cr
 Then, (*) can simply be translated into (4).
 
 % solution
-In order to compute $M_k$ for any input, we can iterate (4) to get a
-simple summation, and substitute in (3) to get closed form solution to
-$M_k(n)$ (provided the decomposition if $n$ into
-$\sum^k_{b=1}f_b(a_b)$ is already known).  Thus, 
+In order to compute $M_k$ for any input, we can apply (4) and (3) to
+get a solution to $M_k(n)$ (provided the decomposition if $n$ into
+$\sum^k_{b=1}f_b(a_b)$ is already known).  Thus,
 $$\eqalign{M_k(f_k(a)+w)&=M_k(f_k(a)+f_{k-1}(u)+v)\cr
                         &=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)+v))\cr
                         &=(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k)\cr}$$
