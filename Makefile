@@ -8,9 +8,9 @@ proof.tex: test.py.tex
 	perl -pe 's/\\footline={.*?}//eg;' < $<.txt.tex > $@
 	$(RM) $<.txt $<.txt.tex
 
-.dvi.ps: ; dvips $<
+%.ps: %.dvi ; dvips $<
 
-.dvi.pdf: ; dvipdf $<
+%.pdf: %.dvi ; dvipdf $<
 
 print: proof.ps; lp $^
 
