@@ -64,6 +64,17 @@ $$\eqalign{M_2(n)&=\sum^{G-1}_{b=0}2^b(2^{g_b}-1)\cr
 &=\sum^{G-1}_{b=0}2^{b+g_b}-\sum^{G-1}_{b=0}2^b\cr
 &=\sum^{G-1}_{b=0}2^{b+g_b}-2^G+1\cr}$$
 
+\proclaim Lemma A.  $M_2(n)$ is smallest when $g$ consists of
+consecutive decreasing integers.
+
+{\it proof.} $M_2(n)$ is smallest when $g$ is in decreasing
+order, because that is how $g_b+b$ is smallest.  We also want $g_b+b$
+to be as small as possible while keeping the size of $g$ also small.
+Thus the best way to do this is by making $g_b+b$ be a constant, and
+everything else follows from there.
+
+\medskip
+
 Let $a$ be the largest integer such that $T_a \le n$, where $T_n$ is
 the $n^{th}$ triangular number (or $T_n={1\over 2}n(n+1)$).  We can
 then construct $g$ such that $g=\{a,\dots,c,c,\dots,1\}$, where
@@ -116,6 +127,9 @@ $$M_3(f_3(a))=\sum^{a-1}_{b=0}2^bM_2(f_2(a-b))=h_3(a)2^a-1$$
 For some $h_3(a)$.  We then see that the general form of the perfect
 solution to $M_k$ is,
 $$M_k(f_k(a))=h_k(a)2^a+(-1)^k\eqno{(3)}$$
+
+\proclaim Lemma B.  $M_k(n)$ is smallest when $n=f_k(a)$ and
+$g=\{f_{k-1}(i);i\in[1,a]\}$ 
 
 For some $h_k(a)$.  So in the process of finding the above solution,
 one naturally runs into the following solution for $h_k(a)$,
