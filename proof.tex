@@ -86,7 +86,7 @@ Conveniently, (1) gives us a way of computing such a thing.  As seen in
 the previous proof for the case when $k=2$, the ideal input for $M_2$
 is some triangular number $T_a$ which gives us $M_2(T_a)=(a-1)2^a+1$.
 We then get the ideal input for $M_3$ like this,
-$$\sum^a_{b=0}2^bM_2(T_{a-b})=M_3(\sum^a_{b=0}T_b)\eqno{(2)}$$
+$$\sum^{a-1}_{b=0}2^bM_2(T_{a-b})=M_3(\sum^{a-1}_{b=0}T_{a-b})\eqno{(2)}$$
 
 % function f
 Thus, the ideal input for $M_3$ is some sum of consecutive triangular
@@ -132,17 +132,17 @@ $$\eqalign{h_{k+1}(a)&=\sum^a_{b=1}h_k(b)\ +(-1)^k\cr
 &=\sum^a_{b=1}\sum^b_{c=1}h_{k-1}(c)\ -a(-1)^k+(-1)^k\cr
 &=\cdots\cr}$$ 
 
-And as we expand the function $h$ more and more, it ``sheds'' off an
+As we expand the function $h$ more and more, it ``sheds'' off an
 alternating series that is dependant on $f$ because of the nested sums
-each term of it was passed through.  Finally, when $h$ has reached its
-edge condition, we are left with a pure nested sum, which is exactly
+each term was passed through.  Finally, when $h$ has reached its edge
+condition, we are left with a pure nested sum, which is exactly
 $f_k(a)$ (note the fact that the edge condition for $h$ is $1$ while
 the edge condition for $f$ is $0$).  After some minor tweaking the
 above equation can be easily simplified into (**).
 
 % composition
-And to solve $M_k(n)$ for any $n$, let $a$ be the largest integer
-which satisfies $f_k(a)\le n$ and $w=n-f_k(a)$.  This gives
+To solve $M_k(n)$ for any $n$, let $a$ be the largest integer which
+satisfies $f_k(a)\le n$ and $w=n-f_k(a)$.  This gives
 $M_k(n)=M_k(f_k(a)+w)$, and if we repeat the above process so that we
 get $u$, the largest integer such that $f_{k-1}(u)\le w$ (note the
 $k-1$), and $v=w-f_{k-1}(u)$.  Thus $M_k(n)=M_k(f_k(a)+f_{k-1}(u)+v)$.
@@ -152,7 +152,11 @@ $$M_k(f_k(a)+f_{k-1}(u)+v)=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)+v)
 This occurs because as was seen in the proof for $k=2$,
 $$\eqalignno{M_k(f_k(a))&=\sum^{a-1}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))\cr
 &=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))+\sum^{a-1}_{b=a-u}2^bM_{k-1}(f_{k-1}(a-b))\cr
-M_k(f_k(a)+f_{k-1}(u))&=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))+2^{a-u}M_{k-1}(f_{k-1}(u))+\sum^{a-1}_{b=a-u}2^{b+1}M_{k-1}(f_{k-1}(a-b))\cr
+}$$
+
+Then when we add in the the overflow term, we have to account for the
+penalty we incurred by increasing the size of $g$.
+$$\eqalignno{M_k(f_k(a)+f_{k-1}(u))&=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))+2^{a-u}M_{k-1}(f_{k-1}(u))+\sum^{a-1}_{b=a-u}2^{b+1}M_{k-1}(f_{k-1}(a-b))\cr
 &=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)))&(*)\cr}$$
 
 \noindent Then, (*) can simply be translated into (4).
