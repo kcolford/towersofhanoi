@@ -2,6 +2,10 @@ all: proof.dvi
 
 proof.tex: test.py.tex
 
+discovery.tar.gz: Makefile proof.tex test.py
+	$(RM) $@
+	tar acf $@ $^
+
 %.py.tex: %.py
 	cat -n $< > $<.txt
 	src2tex $<.txt
@@ -10,14 +14,8 @@ proof.tex: test.py.tex
 
 %.ps: %.dvi ; dvips $<
 
-%.pdf: %.dvi ; dvipdf $<
-
 print: proof.ps; lp $^
 
-clean: ; $(RM) test.py.tex proof.dvi proof.log proof.ps proof.pdf
+clean: ; $(RM) test.py.tex proof.dvi proof.log proof.ps discovery.tar.gz
 
-dist:
-	$(RM) discovery.tar.gz
-	tar zcf discovery.tar.gz Makefile proof.tex test.py
-
-.PHONY: print clean dist
+.PHONY: all clean print

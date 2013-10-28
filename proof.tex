@@ -56,7 +56,7 @@ Let $a$ be the largest integer such that $T_a \le n$, where $T_n$ is
 the $n^{th}$ triangular number (or $T_n={1\over 2}n(n+1)$).  We can
 then construct $g$ such that $g=\{a,\dots,c,c,\dots,1\}$, where
 $c=n-T_a$ and $G=a+1$.  Thus we have
-$$\eqalign{M_2(n)&=\sum^{a-c}_{b=0}2^a+\left(\sum^{a}_{b=a-c+1}2^{a+1}\right)-2^{a+1}+1\cr
+$$\eqalign{M_2(n)&=\sum^{a-c}_{b=0}2^a+\sum^{a}_{b=a-c+1}2^{a+1}\ -2^{a+1}+1\cr
                  &=(a-c+1)2^a+c2^{a+1}-2^{a+1}+1\cr
                  &=(a + c - 1)2^a + 1\cr}$$
 
@@ -87,7 +87,7 @@ If the reader notices the relationship between this and pascal's
 triangle, they will see that consequently we have the following three
 identities,
 $$f_0(a)=1$$
-$$f_k(a)=\left({a+k-1\atop k}\right)$$
+$$f_k(a)={a+k-1\choose k}$$
 $$f_{k+1}(a)+f_k(a+1)=f_{k+1}(a+1)$$
 
 \proclaim Side Note.  The second identity is useful because it allows
@@ -104,11 +104,25 @@ solution to $M_k$ is,
 $$M_k(f_k(a))=h_k(a)2^a+(-1)^k\eqno{(3)}$$
 for some $h_k(a)$.  So in the process of finding the above solution,
 one naturally runs into the following solution for $h_k(a)$,
-$$h_k(a)=\left\{\matrix{1&k=1\cr\left(\sum^a_{b=0}h_{k-1}(b)\right)-2(-1)^k&\oth\cr}\right.$$
+$$h_k(a)=\left\{\matrix{1&k=1\cr\sum^a_{b=1}h_{k-1}(b)-(-1)^k&\oth\cr}\right.$$
 If one observes the fact that $h_k(a)$ is similar in construction to
 $f_k(a)$, $h_k(a)$ can be further simplified into an alternating
 series dependant on $f_k(a)$,
-$$h_k(a)=\sum^{k-1}_{b=0}(-1)^{k+1-b}f_b(a)$$
+$$h_k(a)=\sum^{k-1}_{b=0}(-1)^{k+1-b}f_b(a)\eqno{(**)}$$
+
+% function h
+This can be seen from,
+$$\eqalign{h_{k+1}(a)&=\sum^a_{b=1}h_k(b)\ +(-1)^k\cr
+                    &=\sum^a_{b=1}\sum^b_{c=1}h_{k-1}(c)\ -a(-1)^k+(-1)^k\cr
+                    &=\cdots\cr}$$
+
+and as we expand the function $h$ more and more, it ``sheds'' off an
+alternating series that is dependant on $f$ because of nested sums
+each term of it was passed through.  Finally, when $h$ has reached its
+edge condition, we are left with a pure nested sum, which is exactly
+$f_k(a)$ (note the fact that the edge condition for $h$ is $1$ while
+the edge condition for $f$ is $0$).  After some minor tweaking the
+above equation can be easily simplified into (**).
 
 % composition
 And to solve $M_k(n)$ for any $n$, let $a$ be the largest integer
