@@ -1,13 +1,12 @@
 %&plain
 
-\def\func{M_{k-1}(i) + 2M_k(n - i); i\in \left[1,n\right)}
 \def\oth{{\rm otherwise}}
 
 \footline{\tenrm Copyright \copyright\ 2013 Kieran Colford\hfill\folio}
 
 \centerline{\bf The Running Time of Solving the Towers of Hanoi Puzzle}
 \centerline{By: Kieran Colford}
-\centerline{Date: Thursday, October $24^{th}$, 2013}
+\centerline{Date: Sunday, October $27^{th}$, 2013}
 
 \beginsection Introduction
 
@@ -29,36 +28,48 @@ It is interesting to study the question of how much faster is it to
 solve this puzzle when the number of towers increases to more than
 three.
 
-\beginsection Given
+\beginsection Begin
 
-$$M_k(n)=\left\{\matrix{1 & n = 1\cr 2^n - 1 & k = 1\cr
-                       Min\{\func\}&\oth\cr}\right.$$
+Due to the rules of the game, we know that to move any stack of disks
+we must first move some top portion of the stack to an intermediate.
+Then we must move the remaining disks.  Finally, the disks that were
+set aside must be brought to their destination.
+
+\proclaim Important Fact.  This is a direct consequence of the rules
+that the puzzle is based on, and all legal configurations must be
+achieved by this method.
+
+All in all, if we let $M_k(n)$ be the number of moves necessary to
+solve the puzzle.  Then we know that $M_k(n)=M_{k-1}(i)+2M_k(n-i)$ for
+some integer $i$ which makes $M_k(n)$ as small as possible.
+Therefore,
+$$M_k(n)=\left\{\matrix{1&n=1\cr2^n-1&k=1\cr
+Min\{M_{k-1}(i)+2M_k(n-i);i\in\left[1,n\right)\}&\oth\cr}\right.$$
 
 Where $k$ is the number of towers excluding the first and last (so
 it's the number of empty towers) and $n$ is the number of disks.
 
 Then, by expanding the $M_k(n - i)$ term, we find
-$$M_k(n)=\left\{\matrix{1&n=1\cr
-                        2^n-1&k=1\cr
-                        \sum^{G-1}_{b=0}2^bM_{k-1}(g_b)&\oth\cr}\right.\eqno{(1)}$$
+$$M_k(n)=\left\{\matrix{1&n=1\cr 2^n-1&k=1\cr
+\displaystyle\sum^{G-1}_{b=0}2^bM_{k-1}(g_b)&\oth\cr}\right.\eqno{(1)}$$
 
-where $G$ is the size of some $g$ which minimizes $M_k(n)$ and satisfies
-$$n=\sum^{G-1}_{b=0} g_b$$
+Where $G$ is the size of some $g$ which minimizes $M_k(n)$ and
+satisfies
+$$n=\sum^{G-1}_{b=0}g_b$$
 
 \beginsection Proof for k equals 2
 
-Then, for the case when $k = 2$ we have
-$$\eqalign{M_2(n)&=\sum^{G-1}_{b=0} 2^b(2^{g_b}-1)\cr
-                 &=\sum^{G-1}_{b=0} 2^{b+g_b} - \sum^{G-1}_{b=0} 2^b\cr
-                 &=\sum^{G-1}_{b=0} 2^{b+g_b} - 2^G + 1\cr}$$
+Then, for the case when $k=2$ we have
+$$\eqalign{M_2(n)&=\sum^{G-1}_{b=0}2^b(2^{g_b}-1)\cr
+&=\sum^{G-1}_{b=0}2^{b+g_b}-\sum^{G-1}_{b=0}2^b\cr
+&=\sum^{G-1}_{b=0}2^{b+g_b}-2^G+1\cr}$$
 
 Let $a$ be the largest integer such that $T_a \le n$, where $T_n$ is
 the $n^{th}$ triangular number (or $T_n={1\over 2}n(n+1)$).  We can
 then construct $g$ such that $g=\{a,\dots,c,c,\dots,1\}$, where
 $c=n-T_a$ and $G=a+1$.  Thus we have
-$$\eqalign{M_2(n)&=\sum^{a-c}_{b=0}2^a+\sum^{a}_{b=a-c+1}2^{a+1}\ -2^{a+1}+1\cr
-                 &=(a-c+1)2^a+c2^{a+1}-2^{a+1}+1\cr
-                 &=(a + c - 1)2^a + 1\cr}$$
+$$\eqalign{M_2(n)&=\sum^{a-c}_{b=0}2^a+\sum^{a}_{b=a-c+1}2^{a+1}\
+-2^{a+1}+1\cr &=(a-c+1)2^a+c2^{a+1}-2^{a+1}+1\cr&=(a+c-1)2^a+1\cr}$$
 
 We know that this is the smallest configuration for $g$ because
 $M_2(n)$ has a big-O notation of $O(\sqrt{n}2^{\sqrt{n}})$ and any
@@ -71,7 +82,7 @@ calculus, but this is sufficient for now.
 Now to move on the general case of $M_k(n)$ for all $k$.  In order to
 guarantee that the solution to $M_k(n)$ yields the minimum possible
 value, we can represent $n$ as a sum of perfect inputs to $M_k$.
-Conviently, (1) gives us a way of computing such a thing.  As seen in
+Conveniently, (1) gives us a way of computing such a thing.  As seen in
 the previous proof for the case when $k=2$, the ideal input for $M_2$
 is some triangular number $T_a$ which gives us $M_2(T_a)=(a-1)2^a+1$.
 We then get the ideal input for $M_3$ like this,
@@ -81,8 +92,10 @@ $$\sum^a_{b=0}2^bM_2(T_{a-b})=M_3(\sum^a_{b=0}T_b)\eqno{(2)}$$
 Thus, the ideal input for $M_3$ is some sum of consecutive triangular
 numbers.  In order to generalize this further, let us create a
 function $f_k(a)$ which will produce the ideal input to a given $M_k$
-so that $M_k(f_k(a))$ is as small as possible.  The solution to $f_k$ is,
+so that $M_k(f_k(a))$ is as small as possible.  The solution to $f_k$
+is,
 $$f_k(a)=\sum^a_{b=0}f_{k-1}(b)$$
+
 If the reader notices the relationship between this and pascal's
 triangle, they will see that consequently we have the following three
 identities,
@@ -98,13 +111,15 @@ much slower linear search.
 
 % general
 We can then simplify equation (2) further, like this,
-$$M_3(f_3(a))=\sum^a_{b=0}2^bM_2(f_2(a-b))=h_3(a)2^a-1$$
-for some $h_3(a)$.  We then see that the general form of the perfect
-solution to $M_k$ is,
+$$M_3(f_3(a))=\sum^a_{b=0}2^bM_2(f_2(a-b))=h_3(a)2^a-1$$ for some
+$h_3(a)$.  We then see that the general form of the perfect solution
+to $M_k$ is,
 $$M_k(f_k(a))=h_k(a)2^a+(-1)^k\eqno{(3)}$$
-for some $h_k(a)$.  So in the process of finding the above solution,
+
+For some $h_k(a)$.  So in the process of finding the above solution,
 one naturally runs into the following solution for $h_k(a)$,
 $$h_k(a)=\left\{\matrix{1&k=1\cr\sum^a_{b=1}h_{k-1}(b)-(-1)^k&\oth\cr}\right.$$
+
 If one observes the fact that $h_k(a)$ is similar in construction to
 $f_k(a)$, $h_k(a)$ can be further simplified into an alternating
 series dependant on $f_k(a)$,
@@ -113,11 +128,11 @@ $$h_k(a)=\sum^{k-1}_{b=0}(-1)^{k+1-b}f_b(a)\eqno{(**)}$$
 % function h
 This can be seen from,
 $$\eqalign{h_{k+1}(a)&=\sum^a_{b=1}h_k(b)\ +(-1)^k\cr
-                    &=\sum^a_{b=1}\sum^b_{c=1}h_{k-1}(c)\ -a(-1)^k+(-1)^k\cr
-                    &=\cdots\cr}$$
+&=\sum^a_{b=1}\sum^b_{c=1}h_{k-1}(c)\ -a(-1)^k+(-1)^k\cr
+&=\cdots\cr}$$ 
 
-and as we expand the function $h$ more and more, it ``sheds'' off an
-alternating series that is dependant on $f$ because of nested sums
+And as we expand the function $h$ more and more, it ``sheds'' off an
+alternating series that is dependant on $f$ because of the nested sums
 each term of it was passed through.  Finally, when $h$ has reached its
 edge condition, we are left with a pure nested sum, which is exactly
 $f_k(a)$ (note the fact that the edge condition for $h$ is $1$ while
@@ -129,16 +144,16 @@ And to solve $M_k(n)$ for any $n$, let $a$ be the largest integer
 which satisfies $f_k(a)\le n$ and $w=n-f_k(a)$.  This gives
 $M_k(n)=M_k(f_k(a)+w)$, and if we repeat the above process so that we
 get $u$, the largest integer such that $f_{k-1}(u)\le w$ (note the
-$k-1$), and $v=w-f_{k-1}(u)$.  Thus
-$M_k(n)=M_k(f_k(a)+f_{k-1}(u)+v)$.  This can be further simplified to
+$k-1$), and $v=w-f_{k-1}(u)$.  Thus $M_k(n)=M_k(f_k(a)+f_{k-1}(u)+v)$.
+This can be further simplified to
 $$M_k(f_k(a)+f_{k-1}(u)+v)=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)+v))\eqno{(4)}$$
 
 This occurs because as was seen in the proof for $k=2$,
 $$\eqalignno{M_k(f_k(a))&=\sum^{a-1}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))\cr
-                        &=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))+\sum^{a-1}_{b=a-u}2^bM_{k-1}(f_{k-1}(a-b))\cr
-  M_k(f_k(a)+f_{k-1}(u))&=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))+2^{a-u}M_{k-1}(f_{k-1}(u))
-                        +\sum^{a-1}_{b=a-u}2^{b+1}M_{k-1}(f_{k-1}(a-b))\cr
-                      &=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)))&(*)\cr}$$
+&=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))+\sum^{a-1}_{b=a-u}2^bM_{k-1}(f_{k-1}(a-b))\cr
+M_k(f_k(a)+f_{k-1}(u))&=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))+2^{a-u}M_{k-1}(f_{k-1}(u))+\sum^{a-1}_{b=a-u}2^{b+1}M_{k-1}(f_{k-1}(a-b))\cr
+&=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)))&(*)\cr}$$
+
 Then, (*) can simply be translated into (4).
 
 % solution
@@ -146,14 +161,14 @@ In order to compute $M_k$ for any input, we can apply (4) and (3) to
 get a solution to $M_k(n)$ (provided the decomposition if $n$ into
 $\sum^k_{b=1}f_b(a_b)$ is already known).  Thus,
 $$\eqalign{M_k(f_k(a)+w)&=M_k(f_k(a)+f_{k-1}(u)+v)\cr
-                        &=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)+v))\cr
-                        &=(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k)\cr}$$
+&=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)+v))\cr
+&=(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k)\cr}$$ 
 
 Thus, it is trivial to compute $M_k(n)$ for all $n$ and all $k$ using
 the simple method of using the tail-recursive,
 $$\eqalign{M_k(f_k(a)+w)&=\left\{\matrix{h_k(a)2^a+(-1)^k&w=0\cr
-                                         (h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k)&\oth\cr}\right.\cr
-                        &{\rm where\;}u=Max\{i;i\in {\cal Z}, f_{k-1}(i)\le w\}\cr}$$
+(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k)&\oth\cr}\right.\cr
+&{\rm where\;}u=Max\{i;i\in {\cal Z}, f_{k-1}(i)\le w\}\cr}$$
 
 \noindent{\bf Q.E.D.}
 
