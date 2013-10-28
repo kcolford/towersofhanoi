@@ -94,7 +94,7 @@ numbers.  In order to generalize this further, let us create a
 function $f_k(a)$ which will produce the ideal input to a given $M_k$
 so that $M_k(f_k(a))$ is as small as possible.  The solution to $f_k$
 is,
-$$f_k(a)=\sum^a_{b=0}f_{k-1}(b)$$
+$$f_k(a)=\sum^a_{b=1}f_{k-1}(b)$$
 
 If the reader notices the relationship between this and pascal's
 triangle, they will see that consequently we have the following three
@@ -111,9 +111,10 @@ much slower linear search.
 
 % general
 We can then simplify equation (2) further, like this,
-$$M_3(f_3(a))=\sum^a_{b=0}2^bM_2(f_2(a-b))=h_3(a)2^a-1$$ for some
-$h_3(a)$.  We then see that the general form of the perfect solution
-to $M_k$ is,
+$$M_3(f_3(a))=\sum^{a-1}_{b=0}2^bM_2(f_2(a-b))=h_3(a)2^a-1$$ 
+
+For some $h_3(a)$.  We then see that the general form of the perfect
+solution to $M_k$ is,
 $$M_k(f_k(a))=h_k(a)2^a+(-1)^k\eqno{(3)}$$
 
 For some $h_k(a)$.  So in the process of finding the above solution,
@@ -154,7 +155,7 @@ $$\eqalignno{M_k(f_k(a))&=\sum^{a-1}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))\cr
 M_k(f_k(a)+f_{k-1}(u))&=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))+2^{a-u}M_{k-1}(f_{k-1}(u))+\sum^{a-1}_{b=a-u}2^{b+1}M_{k-1}(f_{k-1}(a-b))\cr
 &=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)))&(*)\cr}$$
 
-Then, (*) can simply be translated into (4).
+\noindent Then, (*) can simply be translated into (4).
 
 % solution
 In order to compute $M_k$ for any input, we can apply (4) and (3) to
