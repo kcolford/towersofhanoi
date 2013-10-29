@@ -189,6 +189,21 @@ $$\eqalign{M_k(f_k(a)+w)&=\left\{\matrix{h_k(a)2^a+(-1)^k&w=0\cr
 (h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k)&\oth\cr}\right.\cr
 &{\rm where\;}u=Max\{i;i\in {\cal Z}, f_{k-1}(i)\le w\}\cr}$$
 
+\beginsection Simplification
+
+Although this is nice, we would like a non-recursive definition.  So
+we proceed as follows.
+
+From this we can further expand it to,
+$$M_k(\sum^k_{b=1}f_b(a_b))=\left(\sum^k_{b=1}h_b(a_b)+h_b(a_{b-1})\right)2^{a_k}+(-1)^k$$
+
+This can be further simplified with the identity
+$h_{b+1}(a)+h_b(a)=f_b(a)$ to become,
+$$M_k(\sum^k_{b=1}f_b(a_b))=\left(h_k(a_k)+\sum^{k-1}_{b=1}f_b(a_b)\right)2^{a_k}+(-1)^k$$
+
+And what's truely remarkable about this is that it becomes,
+$$M_k(f_k(a)+w)=(h_k(a)+w)2^a+(-1)^k$$
+
 \noindent{\bf Q.E.D.}
 
 \vfill

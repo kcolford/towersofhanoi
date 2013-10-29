@@ -1,6 +1,4 @@
-all: proof.dvi
-
-proof.tex: test.py.tex
+proof.dvi: proof.tex test.py.tex
 
 discovery.tar.gz: Makefile proof.tex test.py
 	$(RM) $@
@@ -18,4 +16,4 @@ print: proof.ps; lp $^
 
 clean: ; $(RM) test.py.tex proof.dvi proof.log proof.ps discovery.tar.gz
 
-.PHONY: all clean print
+.PHONY: clean print

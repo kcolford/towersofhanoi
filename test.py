@@ -19,16 +19,15 @@
 
 """
 This module contains a series of methods for computing the Towers of
-Hanoi.
+Hanoi running time.
 """
 
 import doctest
 import unittest
-import profile
 from functools import lru_cache
 
 
-__all__ = ['get_time', 'solve', 'm']
+__all__ = ['time', 'm']
 
 
 class Tester(unittest.TestCase):
@@ -38,39 +37,17 @@ class Tester(unittest.TestCase):
    """
    def test_main(self: 'Tester') -> None:
       """
-      Run a test to make sure that method m behaves the same as
-      get_time.  Since we cannot test all possible inputs, we only
-      test a small number.
+      Run a test to make sure that method m behaves the same as time.
+      Since we cannot test all possible inputs, we only test a small
+      number.
       """
       for k in range(2, 30):
          for n in range(8, 60):
-            self.assertEqual(m(k, n), get_time(n, k))
+            self.assertEqual(m(k, n), time(n, k))
 
-
-def get_time(n: int, m: int) -> int:
-   pass
 
 @lru_cache(None)
-def get_i(n: int, m: int) -> int:
-   """
-   Return the ideal factor by which to split a stack of n disks with m
-   extra towers.
-
-   Dynamic programming is implemented via @functools.lru_cache(None).
-
-   >>> get_i(31, 5)
-   15
-   >>> get_i(40, 3)
-   15
-   >>> get_i(40, 5)
-   19
-   """
-   assert m > 0 or n == 1      
-   func = lambda i: 2 * get_time(n - i, m) + get_time(i, m - 1)
-   return 1 if m == 1 or n == 1 else min(range(1, n), key=func)
-
-@lru_cache(None)
-def get_time(n: int, m: int) -> int:
+def time(n: int, m: int) -> int:
    """
    Compute the minimum time needed to solve the Towers of Hanoi
    problem consisting of n disks and m towers (not including the
@@ -78,57 +55,16 @@ def get_time(n: int, m: int) -> int:
 
    Dynamic programming is implemented via @functools.lru_cache(None).
 
-   >>> get_time(8, 2)
+   >>> time(8, 2)
    33
    """
-   assert m > 0 or n == 1
-   if n == 1: return 1
-   if m == 1: return 2 ** n - 1
-   i = get_i(n, m)
-   return 2 * get_time(n - i, m) + get_time(i, m - 1)
+   if m == 1 or n == 1:
+      return 2**n - 1
 
-def towers(n: int, m: int) -> list:
-   """
-   Generate a nested list of ints to represent the Towers of Hanoi,
-   using the ints as the size of the "disk".
-   """
-   assert m > 0
-   assert n > -1
-   return [list(range(n, -1, -1))] + [[n] for i in range(m + 1)]
-
-def move(t: list, frm: int, to: int, n: int) -> None:
-   """
-   Move n disks from the tower t[frm] to the tower t[to] and print out
-   each intermediate step.
-   """
-   assert t[frm][-1] < t[to][-1]
-   if n == 1:
-      # do the base case move and print out the new set up
-      t[to].append(t[frm].pop())
-      print(t)
-   else:
-      # do some extra calculations to find out what can be used a
-      # temporary and what the best way to solve it is
-      l = [i for i in range(len(t)) if t[frm][-1] < t[i][-1]]
-      l.remove(to)
-      assert len(l) > 0
-      tmp, i = l[0], get_i(n, len(l))
-      # perform the actual move
-      move(t, frm, tmp, n - i)
-      move(t, frm, to, i)
-      move(t, tmp, to, n - i)
-
-def solve(n: int, m: int) -> None:
-   """
-   High level function to set up m + 2 towers with n disks on the
-   first one, and solve it while printing out each step.
-   """
-   a = towers(n, m)
-   print(a)
-   move(a, 0, m + 1, n)
+   return min(time(i, m - 1) + 2 * time(n - i, m) for i in range(1, n))
 
 @lru_cache(None)
-def factorial(n: int) -> int:
+def fac(n: int) -> int:
    """
    Compute the factorial of (the product of all positive integers upto
    and including) n.
@@ -136,66 +72,12 @@ def factorial(n: int) -> int:
    This uses a recursive method of solving combined with
    @functools.lru_cache(None) for dynamic programming.
 
-   >>> factorial(5)
+   >>> fac(5)
    120
-   >>> factorial(0)
+   >>> fac(0)
    1
    """
-   
-   return 1 if n <= 1 else n * factorial(n - 1)
-
-def f(k: int, a: int) -> int:
-   """
-   Compute the binomial coefficient of a + k - 1 choose k.
-
-   >>> f(0, 30)
-   1
-   >>> f(1, 20)
-   20
-   >>> f(2, 3)
-   6
-   >>> f(3, 0)
-   0
-   """
-   return factorial(a + k - 1) // factorial(k) // factorial(a - 1)
-
-def h(k: int, a: int) -> int:
-   """
-   This is a helper function for method m.  See the proof for more
-   information.
-
-   >>> h(1, 3)
-   1
-   >>> h(1, 20)
-   1
-   >>> h(2, 30)
-   29
-   >>> h(3, 0)
-   0
-   """
-   p = sum(f(b, a) for b in range(k - 1, -1, -2))
-   m = sum(f(b, a) for b in range(k - 2, -1, -2))
-   return p - m
-
-def break_input(k: int, n: int) -> int:
-   """
-   This is helper function for method m, it computes the largest
-   integer a that satisfies f(k, a) <= n
-
-   This method is implemented using a naive linear search but can be
-   optimized into using binary search very easily.
-
-   >>> break_input(1, 15)
-   15
-   >>> break_input(2, 8)
-   3
-   >>> break_input(4, 0)
-   0
-   """
-   a = 0
-   while f(k, a + 1) <= n:
-      a += 1
-   return a
+   return 1 if n <= 1 else n * fac(n - 1)
 
 def m(k: int, n: int) -> int:
    """
@@ -228,28 +110,23 @@ def m(k: int, n: int) -> int:
    >>> m(15, 100)
    367
    """
-   if n == 0:
-      return 0
-   a = break_input(k, n)
-   w = n - f(k, a)
-   if w == 0:
-      return h(k, a) * 2**a + (-1)**k
-   else:
-      u = break_input(k - 1, w)
-      return ((h(k, a) + h(k, u)) * 2**a + (-1)**k + 
-              2**(a-u) * (m(k - 1, w) + (-1)**k))
+   # set up helper function to compute nested sums
+   f = lambda x, y: fac(x + y - 1) // fac(x) // fac(y - 1)
 
-def main() -> None:
-   """
-   Run the profiler and test cases for this module.  You can choose
-   what to run by (un)commenting the options you want.
-   """
-   # simple test
-   doctest.testmod()
-   # profiling
-   #profile.run('[m(i, 100) for i in range(2, 20)]')
-   # full test suit
-   #unittest.main()
+   # compute the largest integer a that's smaller than n (via linear
+   # search)
+   a = 0
+   while f(k, a + 1) <= n:
+      a += 1
+   # compute the overflow
+   w = n - f(k, a)
+
+   # compute the value of h_k(a)
+   h_ka = sum((-1)**(k + 1 - b) * f(b, a) for b in range(k))
+
+   # return the answer
+   return (h_ka + w) * 2**a + (-1)**k if n else 0
 
 if __name__ == '__main__':
-   main()
+   doctest.testmod()
+   #unittest.main()
