@@ -1,12 +1,10 @@
 proof.dvi: proof.tex test.py.tex
 
 discovery.tar.gz: Makefile proof.tex test.py
-	$(RM) $@
-	tar acf $@ $^
+	$(RM) $@ && tar acf $@ $^
 
 %.py.tex: %.py
-	cat -n $< > $<.txt
-	src2tex $<.txt
+	cat -n $< > $<.txt && src2tex $<.txt
 	perl -pe 's/\\footline={.*?}//eg;' < $<.txt.tex > $@
 	$(RM) $<.txt $<.txt.tex
 

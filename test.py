@@ -114,15 +114,14 @@ def m(k: int, n: int) -> int:
    f = lambda x, y: fac(x + y - 1) // fac(x) // fac(y - 1)
 
    # compute the largest integer a that's smaller than n (via linear
-   # search)
+   # search) and the overflow w such that f_k(a)+w=n
    a = 0
    while f(k, a + 1) <= n:
       a += 1
-   # compute the overflow
    w = n - f(k, a)
 
    # compute the value of h_k(a)
-   h_ka = sum((-1)**(k + 1 - b) * f(b, a) for b in range(k))
+   h_ka = abs(sum((-1)**b * f(b, a) for b in range(k)))
 
    # return the answer
    return (h_ka + w) * 2**a + (-1)**k if n else 0
