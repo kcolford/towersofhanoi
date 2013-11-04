@@ -1,18 +1,20 @@
-all: proof.dvi
-	git archive -o archive.tar.gz HEAD
+all: text2tex proof.dvi archive.tar.gz
 
-proof.dvi: proof.tex test.py.tex plots.tex
+archive.tar.gz: Makefile proof.tex test.py plot.py text2tex.c
+	$(RM) $@; tar acf $@ $^
 
-plots.tex: Makefile
+proof.dvi: proof.tex test.tex plots.tex
+
+plots.tex:
 	echo 'm(9, x)' | ./plot.py '$$M_{9}(x)$$' > $@ || $(RM) $@
 
-%.py.tex: %.py
-	cat -n $< > $<.txt && src2tex $<.txt
-	perl -pe 's/\\footline=?{.*?}//eg;' < $<.txt.tex > $@
-	$(RM) $<.txt $<.txt.tex
+.py.tex: ; cat -n $< | ./text2tex > $@ || $(RM) $@
 
 print: proof.dvi ; dvips $< -o !lpr
 
-clean: ; $(RM) test.py.tex proof.dvi proof.log plots.tex
+clean:
+	$(RM) *~ *.dvi *.log plots.tex test.tex archive.tar.gz text2tex
+	$(RM) -r __pycache__
 
 .PHONY: all clean print
+.SUFFIXES: .py

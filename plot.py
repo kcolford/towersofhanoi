@@ -15,14 +15,14 @@ def plot3d():
 def main():
     c = 'plot "-" smooth unique title "{}"'
     c = "gnuplot -e 'set term pstex; " + c + "'"
-    for b, a in enumerate(stdin):
-        s = c.format(argv[b + 1 if b + 1 < len(argv) else -1])
+    for a, b in zip(stdin, argv[1:]):
+        s = c.format(b)
         with popen(s, 'w') as p:
             for x in range(100):
                 print(x, eval(a), file=p)
 
 if __name__ == '__main__':
-    if __debug__:
+    if len(argv) > 1:
         main()
     else:
         plot3d()
