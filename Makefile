@@ -10,7 +10,8 @@ gnuplotarg = 'set terminal pstex; plot "-" smooth unique title "$$M_9(n)$$"'
 plots.tex: test.py
 	echo $(echoarg) | python3 -i $< | gnuplot -e $(gnuplotarg) > $@
 
-.py.tex: ; cat -n $< | ./text2tex > $@ || $(RM) $@
+.py.tex:
+	cat -n $< | ./text2tex > $@ || $(RM) $@
 
 print: proof.dvi ; dvips $< -o !lpr
 
