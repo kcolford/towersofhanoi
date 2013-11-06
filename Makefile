@@ -1,3 +1,6 @@
+CFLAGS = -O2
+LDFLAGS = -s
+
 all: text2tex proof.dvi archive.tar.gz
 
 archive.tar.gz: README LICENSE Makefile proof.tex test.py text2tex.c

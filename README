@@ -1,6 +1,15 @@
-Running Time of the Towers of Hanoi Puzzle
+-*- mode: text -*- 
 
-This repo is dedicated to maintaining my proof/solution to an open
-problem.
+	    The Running Time of the Towers of Hanoi Puzzle
 
--*- mode: text -*-
+This repository is dedicated to maintaining my proof/solution to an
+open problem in computer science.  The open problem in question is:
+``How long does it take to solve the Towers of Hanoi puzzle as the
+number of towers increases?''
+
+In order to compile the output, you need to have access to `python3'
+and `gnuplot' (aside from standard compilation programs such as `tex'
+and `cc').  Also, you should preferably have `make' installed.
+
+If you wish to contact me with regards to this, please contact me at
+colfordk@gmail.com
