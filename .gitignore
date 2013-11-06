@@ -1,0 +1,6 @@
+*.dvi
+*.log
+test.tex
+plots.tex
+archive.tar.gz
+text2tex
