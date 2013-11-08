@@ -1,10 +1,11 @@
-CFLAGS = -O2
-LDFLAGS = -s
+all: proof.dvi archive.tar.gz
 
-all: ascii2tex proof.dvi archive.tar.gz
+Makefile: ascii2tex
+	$(MAKE) -C $?
 
-archive.tar.gz: README LICENSE Makefile proof.tex test.py ascii2tex.c
-	tar cf $(basename $@) $^ && gzip -f9 $(basename $@)
+archive.tar.gz: README LICENSE Makefile proof.tex test.py
+	tar cf $(basename $@) $^ ascii2tex/$@
+	gzip -f9 $(basename $@)
 
 proof.dvi: proof.tex test.tex plots.tex
 
@@ -14,13 +15,14 @@ plots.tex: test.py
 	echo $(echoarg) | python3 -i $< | gnuplot -e $(gnuplotarg) > $@
 
 .py.tex:
-	cat -n $< | ./ascii2tex > $@
+	$(MAKE) -C ascii2tex
+	cat -n $< | ./ascii2tex/ascii2tex > $@
 
 print: proof.dvi
 	dvips $< -o !lpr
 
 clean:
-	$(RM) *.dvi *.log plots.tex test.tex ascii2tex
+	$(RM) *.dvi *.log plots.tex test.tex
 
 .PHONY: all clean print
 .SUFFIXES: .py
