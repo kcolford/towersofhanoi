@@ -1,0 +1,3 @@
+[submodule "ascii2tex"]
+	path = ascii2tex
+	url = https://github.com/kcolford/ascii2tex.git
