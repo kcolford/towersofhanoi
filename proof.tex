@@ -7,6 +7,7 @@
 \centerline{\bf The Running Time of Solving the Towers of Hanoi Puzzle}
 \centerline{By: Kieran Colford}
 \centerline{Date: Sunday, October $27^{th}$, 2013}
+\centerline{Revised: Saturday, November $9^{th}$, 2013}
 
 \beginsection Introduction
 
@@ -35,10 +36,6 @@ we must first move some top portion of the stack to an intermediate.
 Then we must move the remaining disks.  Finally, the disks that were
 set aside must be brought to their destination.
 
-\proclaim Important Fact.  This is a direct consequence of the rules
-that the puzzle is based on, and all legal configurations must be
-achieved by this method.
-
 All in all, if we let $M_k(n)$ be the number of moves necessary to
 solve the puzzle.  Then we know that $M_k(n)=M_{k-1}(i)+2M_k(n-i)$ for
 some integer $i$ which makes $M_k(n)$ as small as possible.
@@ -48,6 +45,19 @@ Min\{M_{k-1}(i)+2M_k(n-i);i\in\left[1,n\right)\}&\oth\cr}\right.$$
 
 Where $k$ is the number of towers excluding the first and last (so
 it's the number of empty towers) and $n$ is the number of disks.
+
+\medskip
+
+This recursive definition can be affirmed by noting the fact that
+since we cannot move a whole stack of disks at once, we must break
+them into smaller stacks and set them aside.  Thus we would get
+something like
+$$M_k(v_k+v_{k-1}+\cdots+v_1+1)=2M_k(v_k)+2M_{k-1}(v_{k-1})+\cdots+2M_1(v_1)+M_0(1)$$
+$$M_k(v_k+l)=2M_k(v_k)+M_{k-1}(l)$$
+
+\proclaim Consider.  The above equation is both a sufficient and
+necessary consequence of the rules mentioned in the introduction
+because it can represent every legal method of solving the puzzle.
 
 Then, by expanding the $M_k(n - i)$ term, we find
 $$M_k(n)=\left\{\matrix{1&n=1\cr 2^n-1&k=1\cr
