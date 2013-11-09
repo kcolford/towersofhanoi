@@ -13,7 +13,7 @@ proof.dvi: proof.tex test.tex plots.tex
 
 echoarg = 'a = [print(m(9, x)) for x in range(300)]'
 gnuplotarg = 'set terminal pstex; plot "-" smooth unique title "$$M_9(n)$$"'
-plots.tex: test.py
+plots.tex: test.py Makefile
 	echo $(echoarg) | python3 -i $< | gnuplot -e $(gnuplotarg) > $@
 
 .py.tex:
