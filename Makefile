@@ -1,11 +1,13 @@
+distfiles = README LICENSE Makefile proof.tex test.py
+subdirs = ascii2tex
+
 all: proof.dvi archive.tar.gz
 
-Makefile: ascii2tex
-	$(MAKE) -C $?
+$(addsuffix /%, $(subdirs)):
+	$(MAKE) -C $(dir $@) $(notdir $@)
 
-archive.tar.gz: README LICENSE Makefile proof.tex test.py
-	tar cf $(basename $@) $^ ascii2tex/$@
-	gzip -f9 $(basename $@)
+archive.tar.gz: $(distfiles) $(addsuffix /archive.tar.gz, $(subdirs))
+	tar cf $(basename $@) $^ && gzip -f9 $(basename $@)
 
 proof.dvi: proof.tex test.tex plots.tex
 
@@ -15,14 +17,14 @@ plots.tex: test.py
 	echo $(echoarg) | python3 -i $< | gnuplot -e $(gnuplotarg) > $@
 
 .py.tex:
-	$(MAKE) -C ascii2tex
+	$(MAKE) ascii2tex/ascii2tex
 	cat -n $< | ./ascii2tex/ascii2tex > $@
 
 print: proof.dvi
 	dvips $< -o !lpr
 
-clean:
-	$(RM) *.dvi *.log plots.tex test.tex
+clean: $(addsuffix /clean, $(subdirs))
+	$(RM) *.dvi *.log plots.tex test.tex archive.tar.gz
 
 .PHONY: all clean print
 .SUFFIXES: .py
