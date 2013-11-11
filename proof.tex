@@ -41,7 +41,7 @@ solve the puzzle.  Then we know that $M_k(n)=M_{k-1}(i)+2M_k(n-i)$ for
 some integer $i$ which makes $M_k(n)$ as small as possible.
 Therefore,
 $$M_k(n)=\left\{\matrix{1&n=1\cr2^n-1&k=1\cr
-Min\{M_{k-1}(i)+2M_k(n-i);i\in\left[1,n\right)\}&\oth\cr}\right.$$
+\min\{M_{k-1}(i)+2M_k(n-i)\colon i\in\left[1,n\right)\}&\oth\cr}\right.$$
 
 Where $k$ is the number of towers excluding the first and last (so
 it's the number of empty towers) and $n$ is the number of disks.
