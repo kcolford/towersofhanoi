@@ -1,13 +1,11 @@
 %&plain
 
-\def\oth{{\rm otherwise}}
-
 \footline{\tenrm Copyright \copyright\ 2013 Kieran Colford\hfill\folio}
 
 \centerline{\bf The Running Time of Solving the Towers of Hanoi Puzzle}
 \centerline{By: Kieran Colford}
 \centerline{Date: Sunday, October $27^{th}$, 2013}
-\centerline{Revised: Saturday, November $9^{th}$, 2013}
+\centerline{Revised: Saturday, November $11^{th}$, 2013}
 
 \beginsection Introduction
 
@@ -40,8 +38,9 @@ All in all, if we let $M_k(n)$ be the number of moves necessary to
 solve the puzzle.  Then we know that $M_k(n)=M_{k-1}(i)+2M_k(n-i)$ for
 some integer $i$ which makes $M_k(n)$ as small as possible.
 Therefore,
-$$M_k(n)=\left\{\matrix{1&n=1\cr2^n-1&k=1\cr
-\min\{M_{k-1}(i)+2M_k(n-i)\colon i\in\left[1,n\right)\}&\oth\cr}\right.$$
+$$M_k(n)=\cases{1,&if $n=1$;\cr
+               2^n-1,&if $k=1$;\cr
+               \displaystyle\min_{0<i<n}M_{k-1}(i)+2M_k(n-i),&otherwise.\cr}$$
 
 Where $k$ is the number of towers excluding the first and last (so
 it's the number of empty towers) and $n$ is the number of disks.
@@ -60,8 +59,10 @@ necessary consequence of the rules mentioned in the introduction
 because it can represent every legal method of solving the puzzle.
 
 Then, by expanding the $M_k(n - i)$ term, we find
-$$M_k(n)=\left\{\matrix{1&n=1\cr 2^n-1&k=1\cr
-\sum^{G-1}_{b=0}2^bM_{k-1}(g_b)&\oth\cr}\right.\eqno{(1)}$$
+$$M_k(n)=\cases{1,&if $n=1$;\cr
+                2^n-1,&if $k=1$;\cr
+                \displaystyle\min\sum^{G-1}_{b=0}2^bM_{k-1}(g_b),&otherwise.\cr}
+\eqno{(1)}$$
 
 Where $G$ is the size of some $g$ which minimizes $M_k(n)$ and
 satisfies
@@ -89,7 +90,7 @@ Let $a$ be the largest integer such that $T_a \le n$, where $T_n$ is
 the $n^{th}$ triangular number (or $T_n={1\over 2}n(n+1)$).  We can
 then construct $g$ such that $g=\{a,\dots,c,c,\dots,1\}$, where
 $c=n-T_a$ and $G=a+1$.  Thus we have
-$$\eqalign{M_2(n)&=\sum^{a-c}_{b=0}2^a+\sum^{a}_{b=a-c+1}2^{a+1}\
+$$\eqalign{M_2(n)&=\sum^{a-c}_{b=0}2^a+\sum^{a}_{b=a-c+1}2^{a+1}\;
 -2^{a+1}+1\cr &=(a-c+1)2^a+c2^{a+1}-2^{a+1}+1\cr&=(a+c-1)2^a+1\cr}$$
 
 We know that this is the smallest configuration for $g$ because
@@ -139,11 +140,12 @@ solution to $M_k$ is,
 $$M_k(f_k(a))=h_k(a)2^a+(-1)^k\eqno{(3)}$$
 
 \proclaim Lemma B.  $M_k(n)$ is smallest when $n=f_k(a)$ and
-$g=\{f_{k-1}(i);i\in[1,a]\}$ 
+$g=\{f_{k-1}(i)|i\in[1,a]\}$ 
 
 For some $h_k(a)$.  So in the process of finding the above solution,
 one naturally runs into the following solution for $h_k(a)$,
-$$h_k(a)=\left\{\matrix{1&k=1\cr\sum^a_{b=1}h_{k-1}(b)-(-1)^k&\oth\cr}\right.$$
+$$h_k(a)=\cases{1,&if $k=1$;\cr
+               \sum^a_{b=1}h_{k-1}(b)-(-1)^k,&otherwise.\cr}$$
 
 If one observes the fact that $h_k(a)$ is similar in construction to
 $f_k(a)$, $h_k(a)$ can be further simplified into an alternating
@@ -174,7 +176,7 @@ This can be further simplified to
 $$M_k(f_k(a)+f_{k-1}(u)+v)=M_k(f_k(a))+2^{a-u}(M_k(f_k(u))+M_{k-1}(f_{k-1}(u)+v))\eqno{(4)}$$
 
 This occurs because as was seen in the proof for $k=2$,
-$$\eqalignno{M_k(f_k(a))&=\sum^{a-1}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))\cr
+$$\eqalign{M_k(f_k(a))&=\sum^{a-1}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))\cr
 &=\sum^{a-1-u}_{b=0}2^bM_{k-1}(f_{k-1}(a-b))+\sum^{a-1}_{b=a-u}2^bM_{k-1}(f_{k-1}(a-b))\cr
 }$$
 
@@ -195,9 +197,9 @@ $$\eqalign{M_k(f_k(a)+w)&=M_k(f_k(a)+f_{k-1}(u)+v)\cr
 
 Thus, it is trivial to compute $M_k(n)$ for all $n$ and all $k$ using
 the simple method of using the tail-recursive,
-$$\eqalign{M_k(f_k(a)+w)&=\left\{\matrix{h_k(a)2^a+(-1)^k&w=0\cr
-(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k)&\oth\cr}\right.\cr
-&{\rm where\;}u=Max\{i;i\in {\cal Z}, f_{k-1}(i)\le w\}\cr}$$
+$$M_k(f_k(a)+w)=\cases{h_k(a)2^a+(-1)^k,&if $w=0$;\cr
+(h_k(a)+h_k(u))2^a+(-1)^k+2^{a-u}(M_{k-1}(w)+(-1)^k),&otherwise.\cr}$$
+$${\rm where}\quad u=\max_{f_{k-1}(i)\le w}i$$
 
 \beginsection Simplification
 
