@@ -8,7 +8,7 @@ December\fi \space\number\day, \number\year}
 
 \centerline{\bf The Running Time of Solving the Towers of Hanoi Puzzle}
 \centerline{By: Kieran Colford}
-\centerline{Date: October 27, 2013}
+\centerline{Date: October 16, 2013}
 \centerline{Revised: \today}
 
 \beginsection Introduction
@@ -31,12 +31,25 @@ It is interesting to study the question of how much faster is it to
 solve this puzzle when the number of towers increases to more than
 three.
 
+We will use the well known Frame-Stewart algorithm to arrive solve
+this while also showing that the Frame-Stewart algorithm can represent
+any possible method of solving the puzzle (from a mathematical
+perspective).
+
+A major hurtle in finding this solution is that there is always the
+question of whether or not a given algorithm can find the {\it best\/}
+solution but what if we broke down the problem into finding an
+algorithm that can be parameterized to mimic {\bf any and every}
+possible solution and then find the best way to solve the problem with
+that algorithm.
+
 \beginsection Begin
 
 Due to the rules of the game, we know that to move any stack of disks
 we must first move some top portion of the stack to an intermediate.
 Then we must move the remaining disks.  Finally, the disks that were
-set aside must be brought to their destination.
+set aside must be brought to their destination.  This is also known as
+the Frame-Stewart algorithm.
 
 All in all, if we let $M_k(n)$ be the number of moves necessary to
 solve the puzzle.  Then we know that $M_k(n)=M_{k-1}(i)+2M_k(n-i)$ for
@@ -51,16 +64,19 @@ it's the number of empty towers) and $n$ is the number of disks.
 
 \medskip
 
-This recursive definition can be affirmed by noting the fact that
-since we cannot move a whole stack of disks at once, we must break
-them into smaller stacks and set them aside.  Thus we would get
+\proclaim Theorum.  The Frame-Stewart algorithm is capable of mimicing
+any possible solution to the puzzle.
+
+{\it proof.\/} This recursive definition can be affirmed by noting the
+fact that since we cannot move a whole stack of disks at once, we must
+break them into smaller stacks and set them aside.  Thus we would get
 something like
 $$M_k(v_k+v_{k-1}+\cdots+v_1+1)=2M_k(v_k)+2M_{k-1}(v_{k-1})+\cdots+2M_1(v_1)+M_0(1)$$
 $$M_k(v_k+l)=2M_k(v_k)+M_{k-1}(l)$$
 
-\proclaim Consider.  The above equation is both a sufficient and
-necessary consequence of the rules mentioned in the introduction
-because it can represent every legal method of solving the puzzle.
+The above equation is both a sufficient and necessary consequence of
+the rules mentioned in the introduction because it can represent every
+legal method of solving the puzzle.
 
 Then, by expanding the $M_k(n - i)$ term, we find
 $$M_k(n)=\cases{1,&if $n=1$;\cr
